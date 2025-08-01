@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.communitynoticeboard.navigation.NavGraph
 import com.example.communitynoticeboard.ui.components.BottomNavBar
+import com.example.communitynoticeboard.ui.screens.LoginScreen
 import com.example.compose.CommunityNoticeBoardTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CommunityNoticeBoardTheme {
-                AppContent()
+//                AppContent()
+                LoginScreen(onAuthSuccess = {})
             }
         }
     }
