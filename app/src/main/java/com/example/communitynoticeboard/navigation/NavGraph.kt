@@ -1,31 +1,41 @@
 package com.example.communitynoticeboard.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.communitynoticeboard.ui.screens.AlertScreen
-import com.example.communitynoticeboard.ui.screens.HomeScreen
+import com.example.communitynoticeboard.ui.screens.NoticeFeedScreen
 import com.example.communitynoticeboard.ui.screens.PostScreen
 import com.example.communitynoticeboard.ui.screens.ProfileScreen
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(
+    navController: NavHostController,
+    uid: String,
+    modifier: Modifier
+) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Home.route,
+        modifier = modifier
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen()
+            NoticeFeedScreen()
         }
         composable(route = Screen.Post.route) {
-            PostScreen()
+            PostScreen(uid) {
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Home.route) { inclusive = false }
+                    launchSingleTop = true
+                }
+            }
         }
         composable(route = Screen.Alerts.route) {
-            AlertScreen()
+            NoticeFeedScreen()
         }
         composable(route = Screen.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(navController)
         }
     }
 }

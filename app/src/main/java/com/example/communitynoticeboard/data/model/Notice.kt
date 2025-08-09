@@ -1,4 +1,9 @@
 package com.example.communitynoticeboard.data.model
 
-class Notice {
-}
+import com.google.api.HttpBody
+
+data class Notice (
+    val title: String = "",
+    val body: String = "",
+    val timeStamp: Long = System.currentTimeMillis()
+)

@@ -1,10 +1,27 @@
 package com.example.communitynoticeboard.ui.screens
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.example.communitynoticeboard.navigation.NavGraph
+import com.example.communitynoticeboard.ui.components.BottomNavBar
 
 @Composable
-fun HomeScreen() {
-    Text(text = "Home Screen", textAlign = TextAlign.Center)
+fun HomeScreen(
+        uid: String
+) {
+    val navController = rememberNavController()
+
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) }
+    ) { innerPadding ->
+        NavGraph(
+            navController = navController,
+            uid = uid,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+
 }
