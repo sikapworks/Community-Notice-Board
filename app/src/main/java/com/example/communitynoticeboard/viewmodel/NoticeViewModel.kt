@@ -38,6 +38,8 @@ class NoticeViewModel : ViewModel() {
         val newNotice = Notice(
             title = "Test Notice",
             body = "This is a dummy notice for testing",
+            category = "Event",
+            author = currentUser.displayName ?: "Unknown",
 //            timestamp = System.currentTimeMillis()
         )
 
@@ -86,11 +88,16 @@ class NoticeViewModel : ViewModel() {
         valueEventListener?.let { database.removeEventListener(it) }
     }
 
-    fun postNotice(uid: String, title: String, body: String) {
+    fun postNotice(uid: String, title: String, body: String, category: String, author: String) {
+        val finalAuthor = if (author.isNullOrBlank()) {
+            auth.currentUser?.email?.substringBefore("@") ?: "Unknown"
+        } else {
+            author
+        }
 
         //push().key ensures a unique ID for every notice
         val noticeId = database.child(uid).push().key ?: return
-        val notice = Notice(title = title, body = body)
+        val notice = Notice(title = title, body = body, category = category, author = finalAuthor)
 
         database.child(uid).child(noticeId)
             .setValue(notice)

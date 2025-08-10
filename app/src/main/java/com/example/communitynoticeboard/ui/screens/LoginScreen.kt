@@ -1,6 +1,7 @@
 package com.example.communitynoticeboard.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,13 +15,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -56,6 +57,7 @@ fun LoginScreen(
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,13 +79,13 @@ fun LoginScreen(
             onValueChange = { password = it },
             placeholder = { Text("Password") },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                IconButton(onClick = {passwordVisible = !passwordVisible}) {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
-                        imageVector = if(passwordVisible) Icons.Filled.Done else Icons.Default.Done,
-                        contentDescription = if(passwordVisible) "Hide Password" else "Show Password"
-                        )
+                        imageVector = if (passwordVisible) Icons.Filled.Done else Icons.Default.Done,
+                        contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
+                    )
                 }
             }
         )
@@ -94,14 +96,14 @@ fun LoginScreen(
             onClick = {
                 if (email.isBlank() || password.isBlank()) {
                     errorMessage = "Email or password cannot be empty."
-                }
-                else {
+                } else {
                     errorMessage = null
                     viewModel.loginWithEmail(email, password)
-                } },
+                }
+            },
             enabled = !isLoading,
             modifier = Modifier.fillMaxWidth()
-            ) {
+        ) {
             Text("Login")
         }
         Spacer(Modifier.height(8.dp))
@@ -111,8 +113,7 @@ fun LoginScreen(
             onClick = {
                 if (email.isBlank() || password.isBlank()) {
                     errorMessage = "Email or password cannot be empty."
-                }
-                else {
+                } else {
                     errorMessage = null
                     viewModel.registerWithEmail(email, password)
                 }
@@ -132,9 +133,11 @@ fun LoginScreen(
             is AuthResult.Loading -> {
                 CircularProgressIndicator()
             }
+
             is AuthResult.Error -> {
                 Text("Error: ${state.message}", color = Color.Red)
             }
+
             is AuthResult.Success -> {
                 LaunchedEffect(state) {
                     Toast.makeText(context, "Logged in successfully", Toast.LENGTH_SHORT).show()

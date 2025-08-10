@@ -22,9 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.example.communitynoticeboard.ui.components.CategoryFilterRow
+import com.example.communitynoticeboard.ui.components.NoticeCard
+import com.example.communitynoticeboard.ui.components.TopBar
 import com.example.communitynoticeboard.viewmodel.NoticeViewModel
 import java.text.DateFormat
 import java.util.Date
@@ -36,6 +42,8 @@ fun NoticeFeedScreen(
     val notices by viewModel.notices.collectAsState(emptyList())
     val errorMessage by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
+
+    var selectedCategory by remember { mutableStateOf("All") }
 
     //fetch once when the screen loads
     LaunchedEffect(Unit) {
@@ -49,54 +57,42 @@ fun NoticeFeedScreen(
         }
     }
 
-    // Empty state
-    if (notices.isEmpty()) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "No notices yet",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-else {
-        LazyColumn(
-            modifier = Modifier
-//                .fillMaxSize()
-                .padding(24.dp)
-        ) {
-            items(notices) { notice ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = notice.title,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = notice.body
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = "Posted on: ${
-                                DateFormat.getDateTimeInstance().format(Date(notice.timeStamp))
-                            }",
-                            style = MaterialTheme.typography.labelSmall
-                        )
-
-                    }
-
+    Column {
+        TopBar("Community Notices")
+        CategoryFilterRow(
+            selectedCategory = selectedCategory,
+            onCategorySelected = { category ->
+                if(category == "All") {
+                    viewModel.fetchAllNotices()
+                }
+                else {
+                    viewModel.fetchAllNotices()
                 }
             }
+        )
 
+        // Empty state
+        if (notices.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No notices yet",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                items(notices) { notice ->
+                    NoticeCard(notice)
+                }
+
+            }
         }
     }
 

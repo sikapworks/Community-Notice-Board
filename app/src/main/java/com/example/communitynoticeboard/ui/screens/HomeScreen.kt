@@ -7,10 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.communitynoticeboard.navigation.NavGraph
 import com.example.communitynoticeboard.ui.components.BottomNavBar
+import com.example.communitynoticeboard.ui.components.TopBar
 
 @Composable
 fun HomeScreen(
-        uid: String
+    uid: String
 ) {
     val navController = rememberNavController()
 
@@ -22,6 +23,7 @@ fun HomeScreen(
             uid = uid,
             modifier = Modifier.padding(innerPadding)
         )
+
     }
 
 }

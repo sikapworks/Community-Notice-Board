@@ -31,9 +31,6 @@ fun NavGraph(
                 }
             }
         }
-        composable(route = Screen.Alerts.route) {
-            NoticeFeedScreen()
-        }
         composable(route = Screen.Profile.route) {
             ProfileScreen(navController)
         }
